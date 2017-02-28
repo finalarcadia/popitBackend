@@ -43,23 +43,13 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'guardian',
     'crispy_forms',
-    'oauth2_provider',
-    'social.apps.django_app.default',
-    'rest_framework_social_oauth2',   
-    'rest_social_auth',
     'corsheaders',   
 ]
 
 AUTHENTICATION_BACKENDS = (
 
-    # For the Django-Social Auth
-    'rest_framework_social_oauth2.backends.DjangoOAuth2',
-
     # Guardian object specific permissions
     'guardian.backends.ObjectPermissionBackend',
-
-    # Google OAuth2
-    'social.backends.google.GoogleOAuth2',
 
     'django.contrib.auth.backends.ModelBackend', # this is default
 
@@ -71,8 +61,6 @@ REST_FRAMEWORK = {
         #'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -116,14 +104,14 @@ WSGI_APPLICATION = 'djangoCore.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
-	'default': {
-	'ENGINE': 'django.db.backends.postgresql',
-	'NAME': 'toppitdb',
-	'USER': 'django',
-	'PASSWORD': 'django',
-	'HOST': '127.0.0.1',
-	'PORT': '5432',
-	}
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'topitdb',
+        'USER': 'django',
+        'PASSWORD': 'django',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
 }
 
 

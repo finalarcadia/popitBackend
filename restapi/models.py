@@ -1,13 +1,7 @@
-import datetime
-
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
-
-
-
 
 class Challenge(models.Model):
     #FK
@@ -23,7 +17,7 @@ class Challenge(models.Model):
     class Meta:
 
         unique_together = ('user','videoUrl')
-        permissions = (('view_challenge','View challenges'))
+        permissions = (('view_challenge','View challenges'),)
 
     def __str__(self):
         return self.user + self.date
@@ -41,7 +35,7 @@ class Likes(models.Model):
     class Meta:
 
         unique_together = ('user','challenge')
-        permissions = (('view_like','View likes'))
+        permissions = (('view_like','View likes'),)
 
     def __str__(self):
         return self.user + self.date
@@ -60,12 +54,34 @@ class Comments(models.Model):
     class Meta:
 
         unique_together = ('user','date')
-        permissions = (('view_comment','View comments'))
+        permissions = (('view_comment','View comments'),)
 
     def __str__(self):
         return self.user + self.date
 
+class Profile(models.Model):
+    #FK
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
+    #fields
+    age = models.PositiveSmallIntegerField(null=True)
+    gender = models.CharField(max_length=50, null=True)
+
+    #email verification
+    verified = models.BooleanField(default=False)
+    emailCode = models.CharField(max_length=40, null=True)
+    #keyExpiration = models.DateTimeField(null=True)
+
+    passwordCode = models.CharField(max_length=40, null=True)
+
+    class Meta:
+        #add, change, delete already exist by default
+        permissions = (
+            ('view_profile', 'View user profile'),
+        )
+
+    def __str__(self):
+        return self.user
 
 # class Task(models.Model):
 #     #FK
@@ -107,28 +123,3 @@ class Comments(models.Model):
 #     def __str__(self):
 #         return self.name
 #
-# class Profile(models.Model):
-#     #FK
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-#
-#     #fields
-#     grade = models.PositiveSmallIntegerField(null=True)
-#     age = models.PositiveSmallIntegerField(null=True)
-#     gender = models.CharField(max_length=50, null=True)
-#
-#     #email verification
-#     verified = models.BooleanField(default=False)
-#     emailCode = models.CharField(max_length=40, null=True)
-#     #keyExpiration = models.DateTimeField(null=True)
-#
-#     passwordCode = models.CharField(max_length=40, null=True)
-#
-#     class Meta:
-#         #add, change, delete already exist by default
-#         permissions = (
-#             ('view_profile', 'View user profile'),
-#         )
-#
-#     def __str__(self):
-#         return "User Info: \nGrade:"  + str(self.grade) + "\nAge: " + str(self.age) + "\nGender: " + self.gender \
-#                + "\nUser: " + "" if self.user is None else str(self.user)
