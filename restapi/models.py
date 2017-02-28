@@ -5,21 +5,25 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-class Comments(models.Model):
-    #FK
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
-    challenge = models.ForeignKey(Challenge, on_delete.CASCADE, related_name='comments')
-    parentComment = models.ForeignKey(Comments,on_delete=models.SET_NULL, related_name='comments')
 
+
+
+
+class Challenge(models.Model):
+    #FK
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='challenges')
 
     #fields
-    body = models.CharField(max_length=200)
+    videoUrl = models.CharField(max_length=200)
+    isPublic = models.BooleanField(default=False)
+    title = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
     date = models.DateTimeField(default=timezone.now)
 
     class Meta:
 
-        unique_together = ('user','date')
-        permissions = (('view_comment','View comments'))
+        unique_together = ('user','videoUrl')
+        permissions = (('view_challenge','View challenges'))
 
     def __str__(self):
         return self.user + self.date
@@ -27,7 +31,7 @@ class Comments(models.Model):
 class Likes(models.Model):
     #FK
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
-    challenge = models.ForeignKey(Challenge, on_delete.CASCADE, related_name='likes')
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE, related_name='likes')
 
     #fields
     date = models.DateTimeField(default=timezone.now)
@@ -42,21 +46,21 @@ class Likes(models.Model):
     def __str__(self):
         return self.user + self.date
 
-class Challenge(models.Model):
+class Comments(models.Model):
     #FK
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE, related_name='comments')
+    # parentComment = models.ForeignKey(Comments,on_delete=models.SET_NULL, related_name='comments')
+
 
     #fields
-    videoUrl = models.CharField(max_length=200)
-    isPublic = models.BooleanField(deafult=False)
-    title = models.CharField(max_length=200)
-    description = models.CharField(max_length=200)
+    body = models.CharField(max_length=200)
     date = models.DateTimeField(default=timezone.now)
 
     class Meta:
 
-        unique_together = ('user','videoUrl')
-        permissions = (('view_challenge','View challenges'))
+        unique_together = ('user','date')
+        permissions = (('view_comment','View comments'))
 
     def __str__(self):
         return self.user + self.date
